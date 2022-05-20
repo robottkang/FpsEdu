@@ -20,7 +20,7 @@ public class UseWeapon : MonoBehaviour
     protected bool stopFire;           // 발사를 정지할 것인가
 
     
-    protected void WeaponAction(Gun _gun) // 총기의 발사, 재장전을 수행
+    protected void WeaponAction(Gun _gun) // 총기의 발사, 재장전을 수행하는 함수
     {
         if (!isReload) // 장전 중이 아니라면
         {
@@ -34,14 +34,14 @@ public class UseWeapon : MonoBehaviour
             }
             if (inputReload)
             {
-                StartCoroutine(OnReload(_gun));
+                StartCoroutine(Reload(_gun));
             }
         }
     }
     // 코루틴에 대하여 https://notyu.tistory.com/62
 
 
-    private IEnumerator GunAction(Gun _gun) // 총기의 발사 조건들의 판단를 수행
+    private IEnumerator GunAction(Gun _gun) // 총기의 발사 조건들의 판단를 수행하는 코루틴
     {
         if (_gun.currentAmmo > 0)
         {
@@ -58,7 +58,7 @@ public class UseWeapon : MonoBehaviour
         yield return null;
     }
 
-    private void Fire(Gun _gun) // 총기의 발사를 수행
+    private void Fire(Gun _gun) // 총기의 발사를 수행하는 함수
     {
         if (Time.time - lastFireTime > _gun.fireRate) // 현재의 시간 - 마지막 발사 시간 = 발사 후 흐른 시간
         {
@@ -66,7 +66,7 @@ public class UseWeapon : MonoBehaviour
             _gun.currentAmmo--;
             Hit(_gun.damage, _gun.range);
             lastFireTime = Time.time;      // 마지막 발사 시간을 담음
-            PlaySound(_gun.audioClipFire); // 총기의 발사 사운드클립을 출력
+            PlaySound(_gun.audioClipFire); // 총기의 발사 오디오클립을 출력
         }
     }
 
@@ -79,22 +79,22 @@ public class UseWeapon : MonoBehaviour
         }
     }
 
-    private IEnumerator OnReload(Gun _gun)
+    private IEnumerator Reload(Gun _gun)
     {
-        PlaySound(_gun.audioClipReload);
-        isReload = true;
+        PlaySound(_gun.audioClipReload);     // 장전 오디오클립을 출력
+        isReload = true;                     // 장전 중임을 전역 변수로 선언
         float _reloadTime = _gun.reloadTime;
-        while (_reloadTime > 0)
+        while (_reloadTime > 0)              // 재장전ing
         {
             _reloadTime -= Time.deltaTime;
             yield return new WaitForFixedUpdate();
         }
         Debug.Log("Reload Complete");
         _gun.currentAmmo = _gun.maxAmmo;
-        isReload = false;
+        isReload = false;                    // 장전이 끝남을 선언
     }
 
-    private void PlaySound(AudioClip clip)
+    private void PlaySound(AudioClip clip) // 오디오 클립을 실행하는 함수
     {
         audioSource.Stop();
         audioSource.clip = clip;
