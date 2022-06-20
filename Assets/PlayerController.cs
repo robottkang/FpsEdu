@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        
         characterController = GetComponent<CharacterController>();
     }
 
@@ -56,6 +57,15 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerAim()
     {
+        if (!Input.GetKey(KeyCode.LeftAlt)) // 왼쪽 alt키를 누르면 마우스를 중앙에 잠가주는 코드
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        
         float xMouse = Input.GetAxis("Mouse X");
         float yMouse = Input.GetAxis("Mouse Y");
 

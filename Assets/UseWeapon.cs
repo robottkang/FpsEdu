@@ -10,7 +10,7 @@ public class UseWeapon : MonoBehaviour
     [SerializeField]
     private GameObject hitMark;        // 피격 판정을 보여주기 위한 게임 오브젝트로 필수는 아님
     [SerializeField]
-    private GameObject eyesOfObject;   // 총 발사 시점
+    protected GameObject eyesOfObject;   // 총 발사 시점
     protected RaycastHit collidertHit; // 피격된 오브젝트의 정보
     public LayerMask targetLayerMask;  // 사격 대상의 레이어마스크
     private float lastFireTime;        // 마지막 발사 시간
@@ -50,7 +50,7 @@ public class UseWeapon : MonoBehaviour
                 while (_gun.currentAmmo > 0 && !isReload) // 총기가 장전중이 아니고 남은 탄이 0 보다 큰 동안 반복
                 {
                     Fire(_gun);
-                    yield return null;  // 코루틴은 반드시 반환값이 있어야 함으로 null 값이라도 반환하여 줍시다 
+                    yield return null;  // 코루틴은 반드시 반환값이 있어야 함으로 null 값이라도 반환하여 줍시다
                 }
             }
             else Fire(_gun);
@@ -84,7 +84,7 @@ public class UseWeapon : MonoBehaviour
         PlaySound(_gun.audioClipReload);     // 장전 오디오클립을 출력
         isReload = true;                     // 장전 중임을 전역 변수로 선언
         float _reloadTime = _gun.reloadTime;
-        while (_reloadTime > 0)              // 재장전ing
+        while (_reloadTime > 0)              // 재장전 진행
         {
             _reloadTime -= Time.deltaTime;
             yield return new WaitForFixedUpdate();
